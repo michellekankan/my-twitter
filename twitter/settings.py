@@ -23,10 +23,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = '-u-!u^0-mdka1*r=k5#-i35g00*qfz=_d##y%bmbk@bka(g26^'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = True #正式上線時要設成false 用戶才不會發現是哪裡有問題
 
 ALLOWED_HOSTS = ['127.0.0.1', '192.168.33.10', 'localhost']
-
+INTERNAL_IPS = ['10.0.2.2']
 
 # Application definition
 
@@ -37,8 +37,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    # third party
     'rest_framework',
+    'debug_toolbar',
+    # project app
+    'accounts'
 ]
 
 REST_FRAMEWORK = {
@@ -47,6 +50,10 @@ REST_FRAMEWORK = {
 }
 
 MIDDLEWARE = [
+    # include the debug toolbar middleware as early as possible
+    # but must come after any other middlewares that encodes the response content
+    # such as 'GZipMiddleware'
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -129,3 +136,4 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+

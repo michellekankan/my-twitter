@@ -14,6 +14,7 @@ class LoginSerializer(serializers.Serializer):
     password = serializers.CharField()
 
     def validate(self, data):
+        print('validate-data', data, '~~~')
         if not User.objects.filter(username=data['username'].lower()).exists():
             raise exceptions.ValidationError({
                 'username': 'User does not exist.'
@@ -32,6 +33,13 @@ class SignupSerializer(serializers.ModelSerializer):
 
     # will be called when is_valid is called
     def validate(self, data):
+        # import traceback
+        # print('~~~~~~~')
+        # for line in traceback.format_stack():
+        #     print(line.strip())
+        print('validate(data):', data)
+        print('User:', User)
+        print('User.objects:', User.objects)
         if User.objects.filter(username=data['username'].lower()).exists():
             raise exceptions.ValidationError({
                 'username': 'This username has been occupied.'
@@ -41,8 +49,13 @@ class SignupSerializer(serializers.ModelSerializer):
                 'email': 'This email address has been occupied.'
             })
         return data
-
+    # will be called when save is called
     def create(self, validated_data):
+        # import traceback
+        # print('~~~~~~~')
+        # for line in traceback.format_stack():
+        #     print(line.strip())
+        print('create(validated_data): ', validated_data)
         username = validated_data['username'].lower()
         email = validated_data['email'].lower()
         password = validated_data['password']
