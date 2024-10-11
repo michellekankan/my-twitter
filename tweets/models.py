@@ -14,6 +14,11 @@ class Tweet(models.Model):
     content = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        # user 及 created_at的聯合索引(compound/composite)
+        index_together = (('user', 'created_at'),)
+        ordering = ('user', '-created_at')  #再次編輯model時要在執行makemigrations及migrate
+
     @property
     def hours_to_now(self):
         # created_at是有時區的 可是datetime.now()不帶時區信息, 需要增加上utc的時區信息
