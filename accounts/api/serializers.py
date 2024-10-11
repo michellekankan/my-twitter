@@ -8,13 +8,17 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ('username', 'email')
 
+class UserSerializerForTweet(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'username')
+
 
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()
     password = serializers.CharField()
 
     def validate(self, data):
-        print('validate-data', data, '~~~')
         if not User.objects.filter(username=data['username'].lower()).exists():
             raise exceptions.ValidationError({
                 'username': 'User does not exist.'
@@ -37,9 +41,6 @@ class SignupSerializer(serializers.ModelSerializer):
         # print('~~~~~~~')
         # for line in traceback.format_stack():
         #     print(line.strip())
-        print('validate(data):', data)
-        print('User:', User)
-        print('User.objects:', User.objects)
         if User.objects.filter(username=data['username'].lower()).exists():
             raise exceptions.ValidationError({
                 'username': 'This username has been occupied.'
@@ -55,7 +56,6 @@ class SignupSerializer(serializers.ModelSerializer):
         # print('~~~~~~~')
         # for line in traceback.format_stack():
         #     print(line.strip())
-        print('create(validated_data): ', validated_data)
         username = validated_data['username'].lower()
         email = validated_data['email'].lower()
         password = validated_data['password']
