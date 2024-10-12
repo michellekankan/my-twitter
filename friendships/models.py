@@ -29,7 +29,3 @@ class Friendship(models.Model):
     def __str__(self):
         return '{} followed {}'.format(self.from_user_id, self.to_user_id)
 
-
-from django.db import models
-
-# Create your models here.

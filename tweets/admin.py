@@ -12,6 +12,3 @@ class TweetAdmin(admin.ModelAdmin):
     )
 
 
-from django.contrib import admin
-
-# Register your models here.
