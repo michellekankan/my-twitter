@@ -1,6 +1,7 @@
 from django.test import TestCase as DjangoTestCase
 from django.contrib.auth.models import User
 from tweets.models import Tweet
+from rest_framework.test import APIClient
 
 
 LOGIN_URL = '/api/accounts/login/'
@@ -12,6 +13,12 @@ LOGIN_STATUS_URL = '/api/accounts/login_status/'
 # 終端機 python manage.py test來跑測試 在跑測試時 並不會更改到實際資料庫裡的東西
 class TestCase(DjangoTestCase):
 
+    @property
+    def anonymous_client(self):
+        if hasattr(self, '_anoymous_client'):
+            return self._anoymous_client
+        self._anoymous_client = APIClient()
+        return self._anoymous_client
 
     def create_user(self, username, email=None, password=None):
         if password is None:
