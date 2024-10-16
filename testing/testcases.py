@@ -1,8 +1,9 @@
 from django.test import TestCase as DjangoTestCase
 from django.contrib.auth.models import User
-from rest_framework.test import APIClient
 from tweets.models import Tweet
 from comments.models import Comment
+from rest_framework.test import APIClient
+
 
 
 LOGIN_URL = '/api/accounts/login/'
