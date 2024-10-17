@@ -17,10 +17,11 @@ class CommentViewSet(viewsets.GenericViewSet):
 
     serializer_class = CommentSerializerForCreate
     queryset = Comment.objects.all()
+    filterset_fields = ('tweet_id',)
 
     # detail = False
     # POST /api/comments/ -> create
-    # GET /api/comments/ -> list
+    # GET /api/comments/?tweet_id=1 -> list
     # detail = True
     # GET /api/comments/1/ -> retrieve
     # DELETE /api/comments/1/ -> destroy
@@ -39,6 +40,26 @@ class CommentViewSet(viewsets.GenericViewSet):
             # 因為應該是你沒登入而非你不是當前用戶
             return [IsAuthenticated(), IsObjectOwner()]
         return [AllowAny()]
+
+    def list(self, request, *args, **kwargs):
+        # 不做任何權限檢測
+        if 'tweet_id' not in request.query_params:
+            return Response(
+                {
+                    'message': 'missing tweet_id in request',
+                    'success': False,
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        # 使用filterset_fields()前
+        # tweet_id = request.query_params['tweet_id']
+        # comments = Comment.objects.filter(tweet_id=tweet_id)
+        queryset = self.get_queryset()
+        # 加.prefetch_related是為了從數據庫優化增加查詢效率 發現留言只有一個user 所以到User的數據庫裡就找一次user的資料就好了(不管這個user總共留多少個言)
+        comments = self.filter_queryset(queryset).prefetch_related('user').order_by('created_at')
+        serializer = CommentSerializer(comments, many=True)
+        # many = True代表返回的JSON是一個list
+        return Response({'comments':serializer.data}, status=status.HTTP_200_OK)
 
     def create(self, request, *args, **kwargs):
         data = {
