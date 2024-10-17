@@ -28,8 +28,3 @@ class Tweet(models.Model):
         # 這裡是執行print(tweet instance)的時候會顯示的內容
         return f'{self.created_at} {self.user}: {self.content}'
 
-
-
-from django.db import models
-
-# Create your models here.
