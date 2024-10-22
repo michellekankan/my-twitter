@@ -52,14 +52,14 @@ class AccountApiTests(TestCase):
         response = self.client.get(LOGIN_STATUS_URL)
         self.assertEqual(response.data['has_logged_in'], True)
 
-        print('start testing')
+        # print('start testing')
         # 用了 post 但是用戶不存在
         response = self.client.post(LOGIN_URL, {
             'username':'not exist',
             'password': 'wrong password',
         })
         self.assertEqual(response.status_code, 400)
-        print('response.data:', response.data)
+        # print('response.data:', response.data)
         self.assertEqual(response.data['errors']['username'][0], 'User does not exist.')
 
     def test_logout(self):
