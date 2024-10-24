@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'debug_toolbar',
     'django_filters',
+    'notifications',
     # project app
     'accounts',
     'tweets',
@@ -49,6 +50,7 @@ INSTALLED_APPS = [
     'newsfeeds',
     'comments',
     'likes',
+    'inbox',
 ]
 
 REST_FRAMEWORK = {
@@ -151,3 +153,5 @@ try:
     from .local_settings import *
 except:
     pass
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
